@@ -1,15 +1,17 @@
 import "./App.css";
+import { OverlayBackground } from "./components/OverlayBackground";
 import { OverlayCanvas } from "./components/OverlayCanvas";
+import { OverlayField } from "./components/OverlayField";
 import { useQuerySettings } from "./utils/useQuerySettings";
 
 function App() {
-	const settings = useQuerySettings();
-	console.log(settings);
+	const query = useQuerySettings();
 
+	console.log(query.settings);
 	return (
 		<OverlayCanvas>
-			<h1 className="text-3xl font-bold underline">Hello world!</h1>
-			<h1 className="text-3xl font-bold underline">World hello!</h1>
+			<OverlayBackground source={query.settings.background} />
+			<OverlayField text="Hello World!" {...query.settings} />
 		</OverlayCanvas>
 	);
 }

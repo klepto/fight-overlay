@@ -10,7 +10,6 @@ export const OverlayCanvas = ({ children }) => {
 					width: 1920,
 					height: 1080,
 					overflow: "hidden",
-					boxShadow: `inset 0 0 0 4px red`,
 				}}
 			>
 				{children}

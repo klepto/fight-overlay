@@ -1,6 +1,6 @@
 {
 	"name": "fight-overlay",
-	"homepage": "https://klepto.github.io/fight-overlay/",
+    "homepage": "https://klepto.github.io/fight-overlay",
 	"version": "0.1.0",
 	"private": true,
 	"dependencies": {

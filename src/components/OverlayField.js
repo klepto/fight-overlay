@@ -35,15 +35,19 @@ export const useOverlayFieldStyle = ({
 	size,
 	color,
 	shadow,
+    bold,
 }) => {
 	useExternalStyle(font_url);
 	return {
+        overflow: "hidden",
+        whitespace: "no-wrap",
 		...parseAlignStyle(align),
 		...parsePositionStyle(pos),
 		...(font && { fontFamily: font }),
 		...(size && { fontSize: appendPx(size) }),
 		...(color && { color: color }),
 		...(shadow && { textShadow: "2px 2px 4px rgba(0, 0, 0, 0.5)" }),
+        ...(bold && { fontWeight: 'bold' }),
 	};
 };
 
@@ -57,9 +61,6 @@ const parsePositionStyle = (position) => {
 };
 
 const parseAlignStyle = (align) => {
-	if (!align) {
-		return {};
-	}
 	switch (align) {
 		case "left":
 			return {};

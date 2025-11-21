@@ -1,6 +1,6 @@
 import { useClientSize } from "../utils/useClientSize";
 
-export const OverlayCanvas = ({ children }) => {
+export const OverlayCanvas = ({ children, style }) => {
 	const { width, height } = useClientSize();
 	const scale = Math.min(width / 1920, height / 1080);
 	return (
@@ -10,6 +10,7 @@ export const OverlayCanvas = ({ children }) => {
 					width: 1920,
 					height: 1080,
 					overflow: "hidden",
+                    ...style
 				}}
 			>
 				{children}

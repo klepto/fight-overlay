@@ -1,11 +1,34 @@
-import { useExternalStyle } from "../utils/useExternalStyle";
+import {AnimatePresence, motion} from 'framer-motion';
+import {useExternalStyle} from "../utils/useExternalStyle";
+
+const fadeTransition = {
+	duration: 0.3,
+	ease: "easeInOut",
+};
 
 export const OverlayField = (properties) => {
 	const style = useOverlayFieldStyle(properties);
-	return <span style={style}>{properties.text}</span>;
+	const { name, text } = properties;
+	const key = `overlay-field-${name}-${text}`;
+
+	return (
+		<AnimatePresence>
+			<motion.div
+				key={key}
+				exit={{ opacity: 0 }}
+				initial={{ opacity: 0 }}
+				animate={{ opacity: 1 }}
+				transition={fadeTransition}
+				style={style}
+			>
+				{text}
+			</motion.div>
+		</AnimatePresence>
+	);
 };
 
 export const useOverlayFieldStyle = ({
+	align,
 	pos,
 	font_url,
 	font,
@@ -14,22 +37,42 @@ export const useOverlayFieldStyle = ({
 	shadow,
 }) => {
 	useExternalStyle(font_url);
-	const [x, y] = pos ? (pos.contains(",") ? pos.split(",") : [0, 0]) : [0, 0];
-	const result = {
-		left: x,
-		top: y,
+	return {
+		...parseAlignStyle(align),
+		...parsePositionStyle(pos),
+		...(font && { fontFamily: font }),
+		...(size && { fontSize: appendPx(size) }),
+		...(color && { color: color }),
+		...(shadow && { textShadow: "2px 2px 4px rgba(0, 0, 0, 0.5)" }),
 	};
-	if (font) {
-		result.fontFamily = font;
+};
+
+const parsePositionStyle = (position) => {
+	const [x, y] =
+		!position || !position.includes(",") ? [0, 0] : position.split(",", 2);
+	return {
+		left: appendPx(x),
+		top: appendPx(y),
+	};
+};
+
+const parseAlignStyle = (align) => {
+	if (!align) {
+		return {};
 	}
-	if (size) {
-		result.fontSize = size;
+	switch (align) {
+		case "left":
+			return {};
+		case "right":
+			return { transform: "translate(-100%)" };
+		default:
+			return { transform: "translate(-50%)" };
 	}
-	if (color) {
-		result.color = color;
+};
+
+const appendPx = (value) => {
+	if (typeof value === "number") {
+		return `${value}px`;
 	}
-	if (shadow) {
-		result.textShadow = "2px 2px 4px rgba(0, 0, 0, 0.5)";
-	}
-	return result;
+	return value.endsWith("px") ? value : `${value}px`;
 };

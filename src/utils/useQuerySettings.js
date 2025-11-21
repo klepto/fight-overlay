@@ -1,22 +1,21 @@
-import { useSearchParams } from "react-router";
+import {useSearchParams} from "react-router";
 
 export const useQuerySettings = () => {
 	const [params] = useSearchParams();
-	const settings = {};
-	const fields = {};
+	const result = {
+		settings: {},
+		fields: {},
+	};
 
-	params.entries().forEach(([key, value]) => {
+	for (const [key, value] of params.entries()) {
 		if (!key.includes("_")) {
-			settings[key] = value;
-			return;
+			result.settings[key] = value;
+			continue;
 		}
+		const [field, setting] = key.split("_", 2);
+		result.fields[field] = result.fields[field] || {};
+		result.fields[field][setting] = value;
+	}
 
-		const [field, setting] = key.split("_");
-		if (!fields[field]) {
-			fields[field] = {};
-		}
-		fields[field][setting] = value;
-	});
-
-	return { settings, fields };
+	return result;
 };

@@ -1,27 +1,45 @@
-import { useEffect, useState } from "react";
+import {useCallback, useEffect} from "react";
 import * as XLSX from "xlsx";
-import { useDeepState } from "./useDeepState";
+import {useDeepState} from "./useDeepState";
 
 export const useGoogleSheets = (spreadsheetId) => {
-	const [spreadsheet, setSpreadsheet] = useDeepState({});
+	const POLLING_INTERVAL = 5000;
+	const [sheetData, setSheetData] = useDeepState({});
+
+	const fetchAndSetData = useCallback(async () => {
+		try {
+			const rawResult = await fetchGoogleSheet(spreadsheetId);
+			const parsedData = parseXlsxData(rawResult);
+			setSheetData(parsedData);
+		} catch (error) {
+			console.error("Error fetching Google Sheet data:", error);
+		}
+	}, [spreadsheetId, setSheetData]);
 
 	useEffect(() => {
-		console.log("Fetching Google Sheet:", spreadsheetId);
-		const intervalId = setInterval(async () => {
-			const result = await fetchGoogleSheet(spreadsheetId);
-			setSpreadsheet(parseXlsxData(result));
-		}, 5000);
-		return () => clearInterval(intervalId);
-	}, [spreadsheetId, setSpreadsheet]);
+		if (!spreadsheetId) {
+			console.warn("useGoogleSheets called without a spreadsheetId.");
+			return;
+		}
+		fetchAndSetData();
 
-	return spreadsheet;
+		console.log(`Starting data polling for Sheet ID: ${spreadsheetId}`);
+		const intervalId = setInterval(fetchAndSetData, POLLING_INTERVAL);
+
+		return () => {
+			console.log(`Clearing polling interval for Sheet ID: ${spreadsheetId}`);
+			clearInterval(intervalId);
+		};
+	}, [spreadsheetId, fetchAndSetData]);
+
+	return sheetData;
 };
 
 const fetchGoogleSheet = async (spreadsheetId) => {
 	const response = await fetch(
 		`https://docs.google.com/spreadsheets/d/${spreadsheetId}/export`,
 	);
-	return await response.bytes();
+	return await response.arrayBuffer();
 };
 
 const parseXlsxData = (data) => {

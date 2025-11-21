@@ -1,14 +1,14 @@
 {
   "files": {
     "main.css": "/fight-overlay/static/css/main.2955d9b7.css",
-    "main.js": "/fight-overlay/static/js/main.0642d760.js",
-    "static/media/default-background.webp": "/fight-overlay/static/media/default-background.4ad30d7c8bfa53dac203.webp",
+    "main.js": "/fight-overlay/static/js/main.a29f93f5.js",
+    "static/media/default-background.webp": "/fight-overlay/static/media/default-background.588e0cfe04263816927c.webp",
     "index.html": "/fight-overlay/index.html",
     "main.2955d9b7.css.map": "/fight-overlay/static/css/main.2955d9b7.css.map",
-    "main.0642d760.js.map": "/fight-overlay/static/js/main.0642d760.js.map"
+    "main.a29f93f5.js.map": "/fight-overlay/static/js/main.a29f93f5.js.map"
   },
   "entrypoints": [
     "static/css/main.2955d9b7.css",
-    "static/js/main.0642d760.js"
+    "static/js/main.a29f93f5.js"
   ]
 }
